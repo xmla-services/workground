@@ -18,20 +18,9 @@ import java.util.Objects;
 import mondrian.rolap.RolapColumn;
 import org.eclipse.daanse.rolap.mapping.api.model.SQLExpressionMapping;
 
-import mondrian.rolap.RolapRuntimeException;
 import mondrian.rolap.sql.SqlQuery;
 
 public class ExpressionUtil {
-
-    public static String getExpression1(SQLExpressionMapping expression, final SqlQuery query) {
-        if (expression instanceof RolapColumn c) {
-            return query.getDialect().quoteIdentifier(c.getTable(), c.getName());
-        }
-        
-        SqlQuery.CodeSet codeSet = new SqlQuery.CodeSet();
-        expression.getSqls().forEach(e -> e.getDialects().forEach(d ->codeSet.put(d, e.getStatement())));
-        return codeSet.chooseQuery(query.getDialect());
-    }
 
     public static int hashCode(SQLExpressionMapping expression) {
         if (expression instanceof mondrian.rolap.RolapColumn column) {
@@ -89,13 +78,16 @@ public class ExpressionUtil {
     }
 
     public static String getExpression(SQLExpressionMapping expression, SqlQuery query) {
+        if (expression instanceof RolapColumn c) {
+            return query.getDialect().quoteIdentifier(c.getTable(), c.getName());
+        }
         return SQLUtil.toCodeSet(expression.getSqls()).chooseQuery(query.getDialect());
     }
 
     public static String getTableAlias(SQLExpressionMapping expression) {
         if (expression instanceof RolapColumn c) {
             return c.getTable();
-        }        
+        }
         return null;
     }
 }

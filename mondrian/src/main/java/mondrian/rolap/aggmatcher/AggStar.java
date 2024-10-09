@@ -13,7 +13,7 @@ package mondrian.rolap.aggmatcher;
 
 import static java.util.Collections.EMPTY_LIST;
 
-import static mondrian.rolap.util.ExpressionUtil.getExpression1;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 
 import java.io.PrintWriter;
@@ -526,7 +526,7 @@ public class AggStar {
              * Return the left join expression as string.
              */
             public String getLeft(final SqlQuery query) {
-                return getExpression1(this.left, query);
+                return getExpression(this.left, query);
             }
 
             /**
@@ -542,9 +542,9 @@ public class AggStar {
              */
             String toString(final SqlQuery query) {
                 StringBuilder buf = new StringBuilder(64);
-                buf.append(getExpression1(left, query));
+                buf.append(getExpression(left, query));
                 buf.append(" = ");
-                buf.append(getExpression1(right, query));
+                buf.append(getExpression(right, query));
                 return buf.toString();
             }
             @Override
@@ -577,11 +577,11 @@ public class AggStar {
                         pw.print(") ");
                     }
                 }
-                pw.println(getExpression1(left, sqlQueuy));
+                pw.println(getExpression(left, sqlQueuy));
 
                 pw.print(subprefix);
                 pw.print("right=");
-                pw.println(getExpression1(right, sqlQueuy));
+                pw.println(getExpression(right, sqlQueuy));
             }
 
             /**
@@ -678,7 +678,7 @@ public class AggStar {
                 String exprString;
 
                 if (usagePrefix == null) {
-                    exprString = ExpressionUtil.getExpression1(getExpression(), query);
+                    exprString = ExpressionUtil.getExpression(getExpression(), query);
                 } else {
                     SQLExpressionMapping expressionInner = getExpression();
                     assert expressionInner instanceof mondrian.rolap.RolapColumn;
