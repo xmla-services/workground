@@ -4783,8 +4783,8 @@ public class SchemaModifiers {
                                 .withDefaultMeasure(m)
                                 .withQuery(TableQueryMappingImpl.builder()
                                 		.withName("sales_fact_1997")
-                                		.withAggregationTables(List.of(
-                                				AggregationNameMappingImpl.builder()
+                                		.withAggregationExcludes(List.of(
+                                				AggregationExcludeMappingImpl.builder()
                                 				.withName("agg_c_special_sales_fact_1997")
                                                 .build()
                                 		))
@@ -5151,8 +5151,7 @@ public class SchemaModifiers {
     	private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
     	        .withName("Unit Sales")
     	        .withColumn("unit_sales")
-    	        .withAggregatorType(MeasureAggregatorType.SUM)
-    	        .withFormatString("Standard")
+    	        .withAggregatorType(MeasureAggregatorType.SUM)    	        
     	        .build();
 
         public BasicQueryTestModifier17(CatalogMapping catalog) {
@@ -5305,7 +5304,7 @@ public class SchemaModifiers {
                         		AggregationMeasureMappingImpl.builder()
                                 .withName("[Measures].[Unit Sales]")
                                 .withColumn("UNIT_SALES")
-                                .withRollupType("AvgFromSum")
+                                .withRollupType("SumFromAvg")
                                 .build()
                         ))
                         .withAggregationLevels(List.of(
@@ -5325,8 +5324,7 @@ public class SchemaModifiers {
     	private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
     	        .withName("Unit Sales")
     	        .withColumn("unit_sales")
-    	        .withAggregatorType(MeasureAggregatorType.AVG)
-    	        .withFormatString("Standard")
+    	        .withAggregatorType(MeasureAggregatorType.AVG)    	        
     	        .build();
 
         public BasicQueryTestModifier18(CatalogMapping catalog) {
@@ -5456,8 +5454,7 @@ public class SchemaModifiers {
     	private static final MeasureMappingImpl m = MeasureMappingImpl.builder()
     	        .withName("Unit Sales")
     	        .withColumn("unit_sales")
-    	        .withAggregatorType(MeasureAggregatorType.AVG)
-    	        .withFormatString("Standard")
+    	        .withAggregatorType(MeasureAggregatorType.AVG)    	        
     	        .build();
 
         public BasicQueryTestModifier19(CatalogMapping catalog) {
@@ -6148,13 +6145,13 @@ public class SchemaModifiers {
 
         public BasicQueryTestModifier27(CatalogMapping catalog, String defaultMeasure) {
             super(catalog);
-            if ("Store Invoice".equals(defaultMeasure)) {
+            if ("Store Invoice".equalsIgnoreCase(defaultMeasure)) {
             	this.defaultMeasure = mStoreInvoice;
             }
-            if ("Supply Time".equals(defaultMeasure)) {
+            if ("Supply Time".equalsIgnoreCase(defaultMeasure)) {
             	this.defaultMeasure = mSupplyTime;
             }
-            if ("Warehouse Cost".equals(defaultMeasure)) {
+            if ("Warehouse Cost".equalsIgnoreCase(defaultMeasure)) {
             	this.defaultMeasure = mWarehouseCost;
             }
 
@@ -6641,7 +6638,7 @@ public class SchemaModifiers {
                                     .withName("Promotion Name")
                                     .withColumn("promotion_name")
                                     .withUniqueMembers(true)
-                                    .withOrdinalExpression(SQLExpressionMappingImpl.builder()
+                                    .withKeyExpression(SQLExpressionMappingImpl.builder()
                                         .withSqls(List.of(
                                             SQLMappingImpl.builder()
                                                 .withStatement("RTRIM("+ colName + ")")
@@ -6968,6 +6965,7 @@ public class SchemaModifiers {
                                         .withSqls(List.of(
                                             SQLMappingImpl.builder()
                                                 .withStatement("RTRIM("+ colName + ")")
+                                                .withDialects(List.of("generic"))
                                                 .build()
                                         )).build())
                                     .withParentChildLink(ParentChildLinkMappingImpl.builder()
@@ -7051,7 +7049,7 @@ public class SchemaModifiers {
                                     .withName("Promotion Name")
                                     .withColumn("promotion_name")
                                     .withUniqueMembers(true)
-                                    .withCaptionExpression(SQLExpressionMappingImpl.builder()
+                                    .withKeyExpression(SQLExpressionMappingImpl.builder()
                                         .withSqls(List.of(
                                             SQLMappingImpl.builder()
                                                 .withStatement("RTRIM("+ this.colName + ")")
@@ -7140,7 +7138,7 @@ public class SchemaModifiers {
                                 .withSqls(List.of(
                                     SQLMappingImpl.builder()
                                         .withStatement("RTRIM(quarter)")
-
+                                        .withDialects(List.of("generic"))
                                         .build()
                                 )).build())
                         .build()
@@ -13466,7 +13464,7 @@ public class SchemaModifiers {
                 					AccessHierarchyGrantMappingImpl.builder()
                                         .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
                                         .withAccess(AccessHierarchy.CUSTOM)
-                                        .withRollupPolicyType(RollupPolicyType.HIDDEN) //should be bad
+                                        .withRollupPolicyType(null) //should be bad
                                         .withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_CITY_TABLE_COLUMN_CITY))
                                         .withMemberGrants(List.of(
                                         	AccessMemberGrantMappingImpl.builder()
@@ -13561,7 +13559,7 @@ public class SchemaModifiers {
                                         .build(),
                   					AccessHierarchyGrantMappingImpl.builder()
                                         .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.HIERARCHY_MARITAL_STATUS))
-                                        .withAccess(AccessHierarchy.ALL)
+                                        .withAccess(AccessHierarchy.NONE)
                                         .build(),
                       				AccessHierarchyGrantMappingImpl.builder()
                                         .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.genderHierarchy))
@@ -13843,6 +13841,7 @@ public class SchemaModifiers {
                                             .withAccess(AccessHierarchy.CUSTOM)
                                             .withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withTopLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE))
+                                            .withBottomLevel((LevelMappingImpl) look(FoodmartMappingSupplier.LEVEL_STATE_PROVINCE_TABLE_COLUMN_STATE_PROVINCE))
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
                                                         .withMember("[Customers].[USA].[CA]")
@@ -13972,7 +13971,7 @@ public class SchemaModifiers {
                                         .withAccess(AccessCube.ALL)
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
-                                            	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
+                                            	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.STORE_HIERARCHY_STORE_RAGGED_CUBE))
                                                 .withAccess(AccessHierarchy.CUSTOM)
                                                  .build()
                                             ))
@@ -14041,8 +14040,8 @@ public class SchemaModifiers {
                                              ))
                                              .build(),
                                          AccessHierarchyGrantMappingImpl.builder()
-                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.storeHierarchy))
-                                            .withAccess(AccessHierarchy.CUSTOM)
+                                        	.withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.STORE_HIERARCHY_FOR_HR_CUBE))
+                                            .withAccess(AccessHierarchy.CUSTOM).withRollupPolicyType(RollupPolicyType.PARTIAL)
                                             .withMemberGrants(List.of(
                                             		AccessMemberGrantMappingImpl.builder()
                                                         .withMember("[Store].[All Stores].[USA].[CA]")
@@ -14681,8 +14680,7 @@ public class SchemaModifiers {
                                         .withHierarchyGrants(List.of(
                                         	AccessHierarchyGrantMappingImpl.builder()
                                                 .withHierarchy((HierarchyMappingImpl) look(FoodmartMappingSupplier.customersHierarchy))
-                                                .withAccess(AccessHierarchy.CUSTOM)
-                                                .withRollupPolicyType(RollupPolicyType.PARTIAL)
+                                                .withAccess(AccessHierarchy.CUSTOM)                                                
                                                 .withMemberGrants(List.of(
                                                 	AccessMemberGrantMappingImpl.builder()
                                                         .withMember("[Customers].[USA].[XX]")

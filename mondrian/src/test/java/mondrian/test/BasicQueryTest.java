@@ -2344,6 +2344,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalog.class, dataloader = FastFoodmardDataLoader.class )
   void testCrossjoinWithDescendantsAndUnknownMember(Context context) {
     ((TestConfig)context.getConfig()).setIgnoreInvalidMembersDuringQuery(true);
+    ((TestConfig)context.getConfig()).setIgnoreInvalidMembers(true);
     assertQueryReturns( context.getConnection(),"select {[Measures].[Unit Sales]} on columns,\n" + "NON EMPTY CrossJoin(\n"
         + " Descendants([Product].[All Products], [Product].[Product Family]),\n"
         + " Descendants([Store].[All Stores].[Foo], [Store].[Store State])) on rows\n" + "from [Sales]", "Axis #0:\n"

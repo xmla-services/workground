@@ -107,7 +107,7 @@ class SteelWheelsAggregationTest {
     .withHideMemberIfType(HideMemberIfType.NEVER)
     //.withCaption("Address Line 1")
     .build();
-    
+
     private static final HierarchyMappingImpl customersHierarchy = HierarchyMappingImpl.builder()
     .withName("Customers Hierarchy")
     .withVisible(true)
@@ -117,10 +117,10 @@ class SteelWheelsAggregationTest {
     .withQuery(TableQueryMappingImpl.builder().withName("customer_w_ter").build())
     .withLevels(List.of(
     	addressLevel,
-        nameLevel    
+        nameLevel
     ))
     .build();
-    
+
     private static final StandardDimensionMappingImpl customersDimension = StandardDimensionMappingImpl.builder()
             .withVisible(true)
             .withName("Customers Dimension")
@@ -142,10 +142,10 @@ class SteelWheelsAggregationTest {
             .build()
     ))
     .withMeasureGroups(List.of(MeasureGroupMappingImpl.builder().withMeasures(List.of(
-           MeasureMappingImpl.builder()       		                        	
+           MeasureMappingImpl.builder()
             .withName("Price Each")
             .withColumn("PRICEEACH")
-            .withAggregatorType(MeasureAggregatorType.SUM)    		                            
+            .withAggregatorType(MeasureAggregatorType.SUM)
             .withVisible(true)
             .build(),
         MeasureMappingImpl.builder()
@@ -154,7 +154,7 @@ class SteelWheelsAggregationTest {
             .withAggregatorType(MeasureAggregatorType.SUM)
             .withVisible(true)
             .build()
-    		
+
     )).build()))
     .build();
 
@@ -169,15 +169,15 @@ class SteelWheelsAggregationTest {
         SystemWideProperties.instance().populateInitial();
     }
 
-    
-    
+
+
     private CatalogMapping getSchemaWith(List<AccessRoleMappingImpl> roles) {
 
     	return CatalogMappingImpl.builder()
     			.withSchemas(List.of(
     					SchemaMappingImpl.builder()
     		            .withName("SteelWheels")
-    		            .withDescription("1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2")    		            
+    		            .withDescription("1 admin role, 1 user role. For testing MemberGrant with caching in 5.1.2")
     		            .withCubes(List.of(customersCube))
     		            .withAccessRoles(roles)
     		            .build()
@@ -191,7 +191,7 @@ class SteelWheelsAggregationTest {
     void testWithAggregation(Context context) throws Exception {
         ((TestConfig)context.getConfig()).setUseAggregates(true);
         ((TestConfig)context.getConfig()).setReadAggregates(true);
-         
+
         final CatalogMapping schema = getSchemaWith(
                 List.of(AccessRoleMappingImpl.builder()
                         .withName("Power User")
@@ -200,7 +200,7 @@ class SteelWheelsAggregationTest {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                 	AccessCubeGrantMappingImpl.builder()
-                                        .withCube(customersCube) 
+                                        .withCube(customersCube)
                                         .withAccess(AccessCube.ALL)
                                         .withDimensionGrants(List.of(
                                             AccessDimensionGrantMappingImpl.builder()
@@ -232,7 +232,7 @@ class SteelWheelsAggregationTest {
                         ))
                         .build())
                 );
-        
+
         RolapSchemaPool.instance().clear();
         ((TestContext)context).setCatalogMappingSupplier(new PojoMappingModifier(schema));
         assertQueryReturns(((TestContext)context).getConnection(List.of("Power User")), QUERY, EXPECTED);
@@ -251,7 +251,7 @@ class SteelWheelsAggregationTest {
                                 .withAccess(AccessSchema.NONE)
                                 .withCubeGrant(List.of(
                                 	AccessCubeGrantMappingImpl.builder()
-                                        .withCube(customersCube) 
+                                        .withCube(customersCube)
                                         .withAccess(AccessCube.ALL)
                                         .withDimensionGrants(List.of(
                                             AccessDimensionGrantMappingImpl.builder()
@@ -268,7 +268,7 @@ class SteelWheelsAggregationTest {
                                                 .withMemberGrants(List.of(
                                                 	AccessMemberGrantMappingImpl.builder()
                                                         .withMember("[Customer_DimUsage.Customers Hierarchy].[1 rue Alsace-Lorraine]")
-                                                        .withAccess(AccessMember.NONE)
+                                                        .withAccess(AccessMember.ALL)
                                                         .build()
                                                 ))
                                                 .build()
@@ -300,7 +300,7 @@ class SteelWheelsAggregationTest {
            				AccessSchemaGrantMappingImpl.builder()
            					.withAccess(AccessSchema.NONE)
                             .build()))
-                     .build(),           			 
+                     .build(),
                 powerUserRole = AccessRoleMappingImpl.builder()
                      .withName("Power User")
                      .withAccessSchemaGrants(List.of(
@@ -308,7 +308,7 @@ class SteelWheelsAggregationTest {
                              .withAccess(AccessSchema.NONE)
                              .withCubeGrant(List.of(
                              	AccessCubeGrantMappingImpl.builder()
-                                     .withCube(customersCube) 
+                                     .withCube(customersCube)
                                      .withAccess(AccessCube.ALL)
                                      .withDimensionGrants(List.of(
                                          AccessDimensionGrantMappingImpl.builder()
@@ -342,7 +342,7 @@ class SteelWheelsAggregationTest {
                     	fooRole
                      ))
                      .build()
-                     
+
            	));
         RolapSchemaPool.instance().clear();
         ((TestContext)context).setCatalogMappingSupplier(new PojoMappingModifier(schema));
@@ -389,7 +389,7 @@ class SteelWheelsAggregationTest {
                                                 .build()
                                         ))
                                         .build()
-                                ))           					
+                                ))
                             .build()))
                      .build(),
                 powerUserRole = AccessRoleMappingImpl.builder()
@@ -399,7 +399,7 @@ class SteelWheelsAggregationTest {
                              .withAccess(AccessSchema.NONE)
                              .withCubeGrant(List.of(
                              	AccessCubeGrantMappingImpl.builder()
-                                     .withCube(customersCube) 
+                                     .withCube(customersCube)
                                      .withAccess(AccessCube.ALL)
                                      .withDimensionGrants(List.of(
                                          AccessDimensionGrantMappingImpl.builder()
@@ -433,7 +433,7 @@ class SteelWheelsAggregationTest {
                     	fooRole
                      ))
                      .build()
-                     
+
            	));
         RolapSchemaPool.instance().clear();
         ((TestContext)context).setCatalogMappingSupplier(new PojoMappingModifier(schema));

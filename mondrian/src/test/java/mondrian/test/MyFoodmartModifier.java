@@ -855,7 +855,7 @@ public class MyFoodmartModifier extends PojoMappingModifier {
                 .withCubes(List.of(
                 		sales = PhysicalCubeMappingImpl.builder()
                         .withName("Sales")
-                        .withQuery(TableQueryMappingImpl.builder().withName("warehouse").withAggregationExcludes(
+                        .withQuery(TableQueryMappingImpl.builder().withName("sales_fact_1997").withAggregationExcludes(
                             List.of(
                             	AggregationExcludeMappingImpl.builder()
                                     .withPattern(".*")

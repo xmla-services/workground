@@ -803,6 +803,7 @@ class SchemaTest {
                             .builder()
                             .withName("Yearly Income")
                             .withColumn("yearly_income")
+                            .withTable("customer_not_found")
                             .withUniqueMembers(true)
                             .build();
                     HierarchyMappingImpl hierarchy = HierarchyMappingImpl
@@ -9424,6 +9425,7 @@ class SchemaTest {
                     null, null, cubeDef, null, null, null);
             withSchema(context, schema);
              */
+            ((TestContext)context).setCatalogMappingSupplier(new FoodmartMappingSupplier());
             withSchema(context, TestVirtualCubesVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
@@ -9563,6 +9565,7 @@ class SchemaTest {
                     null, null, cubeDef, null, null, null);
             withSchema(context, schema);
              */
+            ((TestContext)context).setCatalogMappingSupplier(new FoodmartMappingSupplier());
             withSchema(context, TestVirtualDimensionVisibilityModifier::new);
             final Cube cube =
                 context.getConnection().getSchema()
